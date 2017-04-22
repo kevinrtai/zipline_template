@@ -1,11 +1,9 @@
 from __future__ import print_function
 from zipline.api import order, record, symbol
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from pandas_datareader import DataReader
-from pykalman import KalmanFilter
 
 def initialize(context):
   context.trading_day_counter = 0
