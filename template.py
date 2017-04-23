@@ -1,5 +1,5 @@
 from __future__ import print_function
-from zipline.api import order, record, symbol
+from zipline.api import order, order_target, record, symbol
 
 import numpy as np
 import pandas as pd
@@ -16,4 +16,6 @@ def handle_data(context, data):
   context.trading_day_counter += 1
 
   # Construct Kalman filter since the start of trading 
-  
+
+
+def record_vars(context): 
