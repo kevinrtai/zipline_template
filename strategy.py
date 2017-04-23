@@ -32,31 +32,6 @@ class Strategy(object):
     margin = self.get_margin()
     return (self.capital - margin - self.used) < cost
 
-  def s_order(self, ticker, qty, data):
-    # First check that we have enough capital to do so
-    cost = data.current(ticker)['price'] * qty
-    if self.can_trade(cost):
-      order(ticker, qty)
-      return True
-    return False
-
-  def s_order_target(self, ticker, qty, data):
-    # First check that we have enough capital to do so
-    cost = data.current(ticker)['price'] * qty
-    if self.can_trade(cost):
-      order_target(ticker, qty)
-      return True
-    return False
-
-  def s_order_target_percent(self, ticker, percent):
-    # First check that we have enough capital to do so
-    cost = self.capital * percent
-    if self.can_trade(cost):
-      order_target_percent(ticker, percent)
-      return True
-    return False
-
-
 class LongShortStrategy(Strategy):
   def __init__(self, capital):
     Strategy.__init__(self, capital)
@@ -65,18 +40,21 @@ class LongShortStrategy(Strategy):
 
   def trade(self, context, data):
     # Just order target of each of the positions
+    orders = []
     for ticker in self.long_positions:
       qty = self.long_positions[ticker]
-      self.s_order_target(ticker, qty, data)
+      orders.append((ticker, qty))
     for ticker in self.short_positions:
       qty = self.short_positions[ticker]
-      self.s_order_target(ticker, -qty, data)
+      orders.append((ticker, qty))
+
+    return orders
 
   def exit(self):
     # Attempt to liquidate every position
+    orders = []
     for ticker in self.long_positions:
-      order_target(ticker, 0)
+      orders.append((ticker, 0))
     for ticker in self.short_positions:
-      order_target(ticker, 0)
-
+      orders.append((ticker, 0))
 
