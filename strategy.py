@@ -58,12 +58,19 @@ class Strategy(object):
 
 
 class LongShortStrategy(Strategy):
-  def __init__(self):
+  def __init__(self, capital):
+    Strategy.__init__(self, capital)
     self.long_positions = {}
     self.short_positions = {}
 
   def trade(self, context, data):
-    
+    # Just order target of each of the positions
+    for ticker in self.long_positions:
+      qty = self.long_positions[ticker]
+      self.s_order_target(ticker, qty, data)
+    for ticker in self.short_positions:
+      qty = self.short_positions[ticker]
+      self.s_order_target(ticker, -qty, data)
 
   def exit(self):
     # Attempt to liquidate every position

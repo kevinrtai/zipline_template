@@ -19,3 +19,5 @@ def handle_data(context, data):
 
 
 def record_vars(context): 
+  '''Record information here'''
+  pass
